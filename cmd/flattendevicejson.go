@@ -65,7 +65,7 @@ type ItemValue struct {
 	Model               string     `json:"model"`
 	Year                string     `json:"year"`
 	LastCmdDate         uint64     `json:"lastCmdDate"`
-	BattPercent         uint64     `json:"battPercent"`
+	BattPercent         float64    `json:"battPercent"`
 }
 
 type Device struct {
@@ -279,15 +279,16 @@ type Vehicle struct {
 }
 
 type Wifi struct {
-	Apn        string `json:"apn"`
-	Pwd        string `json:"pwd"`
-	Auth       string `json:"auth"`
-	SSID       string `json:"ssid"`
-	ApnPwd     string `json:"apnPwd"`
-	Encrypt    string `json:"encrypt"`
-	ApnUname   string `json:"apnUname"`
-	Broadcast  bool   `json:"broadcast"`
-	EnableWifi bool   `json:"enableWifi"`
+	Apn         string `json:"apn"`
+	Pwd         string `json:"pwd"`
+	Auth        string `json:"auth"`
+	SSID        string `json:"ssid"`
+	ApnPwd      string `json:"apnPwd"`
+	Encrypt     string `json:"encrypt"`
+	ApnUname    string `json:"apnUname"`
+	Broadcast   bool   `json:"broadcast"`
+	EnableWifi  bool   `json:"enableWifi"`
+	RemainOnSec uint64 `json:"remainOnSec"`
 }
 
 type SettingsSynched struct {
@@ -403,17 +404,110 @@ func printDevices(items Items) string {
 		builder.WriteString("\"device.settings.data.ota.vcmVehicleLibUrl\": \"" + value.Device.Settings.Data.Ota.VcmVehicleLIBURL + IE)
 		builder.WriteString("\"device.settings.data.ota.vcmProtocolLibUrl\": \"" + value.Device.Settings.Data.Ota.VcmProtocolLIBURL + IE)
 		builder.WriteString("\"device.settings.data.ver\": " + strconv.FormatUint(value.Device.Settings.Data.Ver, 10) + ",")
-
-		//TODO: Finish the rest of the output
-
+		builder.WriteString("\"device.settings.data.wifi.apn\": \"" + value.Device.Settings.Data.Wifi.Apn + IE)
+		builder.WriteString("\"device.settings.data.wifi.pwd\": \"" + value.Device.Settings.Data.Wifi.Pwd + IE)
+		builder.WriteString("\"device.settings.data.wifi.auth\": \"" + value.Device.Settings.Data.Wifi.Auth + IE)
+		builder.WriteString("\"device.settings.data.wifi.ssid\": \"" + value.Device.Settings.Data.Wifi.SSID + IE)
+		builder.WriteString("\"device.settings.data.wifi.apnPwd\": \"" + value.Device.Settings.Data.Wifi.ApnPwd + IE)
+		builder.WriteString("\"device.settings.data.wifi.encrypt\": \"" + value.Device.Settings.Data.Wifi.Encrypt + IE)
+		builder.WriteString("\"device.settings.data.wifi.broadcast\": \"" + value.Device.Settings.Data.Wifi.ApnUname + IE)
+		builder.WriteString("\"device.settings.data.wifi.enableWifi\": " + strconv.FormatBool(value.Device.Settings.Data.Wifi.EnableWifi) + ",")
+		builder.WriteString("\"device.settings.data.wifi.remainOnSec\": " + strconv.FormatUint(value.Device.Settings.Data.Wifi.RemainOnSec, 10) + ",")
+		builder.WriteString("\"device.settings.data.config.feature\": " + strconv.FormatUint(value.Device.Settings.Data.Config.Feature, 10) + ",")
+		builder.WriteString("\"device.settings.data.config.mqttUrl\": \"" + value.Device.Settings.Data.Config.MqttURL + IE)
+		builder.WriteString("\"device.settings.data.config.interval\": " + strconv.FormatUint(value.Device.Settings.Data.Config.Interval, 10) + ",")
+		builder.WriteString("\"device.settings.data.config.rootCAUrl\": \"" + value.Device.Settings.Data.Config.RootCAURL + IE)
+		builder.WriteString("\"device.settings.data.config.reportList\": \"" + value.Device.Settings.Data.Config.ReportList + IE)
+		builder.WriteString("\"device.settings.data.motion.curvFit\": " + strconv.FormatBool(value.Device.Settings.Data.Motion.CurvFit) + ",")
+		builder.WriteString("\"device.settings.data.motion.targAcc\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.TargAcc, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.enableHF\": " + strconv.FormatBool(value.Device.Settings.Data.Motion.EnableHF) + ",")
+		builder.WriteString("\"device.settings.data.motion.targAccTO\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.TargAccTO, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.curvFitInt\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.CurvFitInt, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.battLowMult\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.BattLowMult, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.battMedMult\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.BattMedMult, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.curvFitTrig\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.CurvFitTrig, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.battRptCount\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.BattRptCount, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.stopInterval\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.StopInterval, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.recheckTmSecs\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.RecheckTmSecs, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.telemInterval\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.TelemInterval, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.interimStopInt\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.InterimStopInt, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.moveDistThresh\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.MoveDistThresh, 10) + ",")
+		builder.WriteString("\"device.settings.data.motion.stopAccelWupThresh\": " + strconv.FormatUint(value.Device.Settings.Data.Motion.StopAccelWupThresh, 10) + ",")
+		builder.WriteString("\"device.settings.data.exTemp.always\": " + strconv.FormatBool(value.Device.Settings.Data.EXTTemp.Always) + ",")
+		builder.WriteString("\"device.settings.data.exTemp.deltaRpt\": " + strconv.FormatUint(uint64(value.Device.Settings.Data.EXTTemp.DeltaRpt), 10) + ",")
+		builder.WriteString("\"device.settings.data.exTemp.rptInterval\": " + strconv.FormatUint(value.Device.Settings.Data.EXTTemp.RptInterval, 10) + ",")
+		builder.WriteString("\"device.settings.data.exTemp.collectInterval\": " + strconv.FormatUint(value.Device.Settings.Data.EXTTemp.CollectInterval, 10) + ",")
+		builder.WriteString("\"device.settings.data.vehicle.vinOverride\": \"" + value.Device.Settings.Data.Vehicle.VinOverride + IE)
+		builder.WriteString("\"device.settings.data.vehicle.cfgIgnThresh\": " + strconv.FormatUint(value.Device.Settings.Data.Vehicle.CFGIgnThresh, 10) + ",")
+		builder.WriteString("\"device.settings.data.vehicle.fuelTankSize\": " + strconv.FormatUint(value.Device.Settings.Data.Vehicle.FuelTankSize, 10) + ",")
+		builder.WriteString("\"device.settings.data.vehicle.lowVinCutoff\": " + strconv.FormatUint(value.Device.Settings.Data.Vehicle.LowVinCutoff, 10) + ",")
+		builder.WriteString("\"device.settings.data.vehicle.gpsOdomOffset\": " + strconv.FormatUint(value.Device.Settings.Data.Vehicle.GpsOdomOffset, 10) + ",")
+		builder.WriteString("\"device.settings.data.vehicle.disableEVDetection\": " + strconv.FormatBool(value.Device.Settings.Data.Vehicle.DisableEVDetection) + ",")
+		builder.WriteString("\"device.settings.data.driverId.offTime\": " + strconv.FormatUint(value.Device.Settings.Data.DriverID.OffTime, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverId.timeout\": " + strconv.FormatUint(value.Device.Settings.Data.DriverID.Timeout, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverId.reminder\": " + strconv.FormatUint(value.Device.Settings.Data.DriverID.Reminder, 10) + ",")
+		builder.WriteString("\"device.settings.data.analytics.feature\": " + strconv.FormatUint(value.Device.Settings.Data.Analytics.Feature, 10) + ",")
+		builder.WriteString("\"device.settings.data.bluetooth.scan\": " + strconv.FormatUint(value.Device.Settings.Data.Bluetooth.Scan, 10) + ",")
+		builder.WriteString("\"device.settings.data.bluetooth.macFilter\": \"" + value.Device.Settings.Data.Bluetooth.MACFilter + IE)
+		builder.WriteString("\"device.settings.data.bluetooth.nameFilter\": \"" + value.Device.Settings.Data.Bluetooth.NameFilter + IE)
+		builder.WriteString("\"device.settings.data.bluetooth.beaconFilter\": \"" + value.Device.Settings.Data.Bluetooth.BeaconFilter + IE)
+		builder.WriteString("\"device.settings.data.bluetooth.moveInterval\": " + strconv.FormatUint(value.Device.Settings.Data.Bluetooth.MoveInterval, 10) + ",")
+		builder.WriteString("\"device.settings.data.bluetooth.stopInterval\": " + strconv.FormatUint(value.Device.Settings.Data.Bluetooth.StopInterval, 10) + ",")
+		builder.WriteString("\"device.settings.data.telemetry.topic\": \"" + value.Device.Settings.Data.Telemetry.Topic + IE)
+		builder.WriteString("\"device.settings.data.telemetry.feature\": " + strconv.FormatUint(value.Device.Settings.Data.Telemetry.Feature, 10) + ",")
+		builder.WriteString("\"device.settings.data.telemetry.mqttUrl\": \"" + value.Device.Settings.Data.Telemetry.MqttURL + IE)
+		builder.WriteString("\"device.settings.data.telemetry.rootCAUrl\": \"" + value.Device.Settings.Data.Telemetry.RootCAURL + IE)
+		builder.WriteString("\"device.settings.data.telemetry.reportList\": \"" + value.Device.Settings.Data.Telemetry.ReportList + IE)
+		builder.WriteString("\"device.settings.data.telemetry.provisionUrl\": \"" + value.Device.Settings.Data.Telemetry.ProvisionURL + IE)
+		builder.WriteString("\"device.settings.data.driverBehaviour.spdAdj\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.SpdAdj, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.heavyImp\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.HeavyImp, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.lightImp\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.LightImp, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.heavyTurn\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.HeavyTurn, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.lightTurn\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.LightTurn, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.heavyAccel\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.HeavyAccel, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.heavyBrake\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.HeavyBrake, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.lightAccel\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.LightAccel, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.lightBrake\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.LightBrake, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.harshBuzzer\": " + strconv.FormatBool(value.Device.Settings.Data.DriverBehavior.HarshBuzzer) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.harshConfig\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.HarshConfig, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.heavyPeriod\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.HeavyPeriod, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.lightPeriod\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.LightPeriod, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.disableHarsh\": " + strconv.FormatBool(value.Device.Settings.Data.DriverBehavior.DisableHarsh) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.impactPeriod\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.ImpactPeriod, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.spdToTrigrWrnKmh\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.SpdToTrigrWrnKmh, 10) + ",")
+		builder.WriteString("\"device.settings.data.driverBehaviour.spdToTrigrWrnDurSec\": " + strconv.FormatUint(value.Device.Settings.Data.DriverBehavior.SpdToTrigrWrnDurSEC, 10) + ",")
+		builder.WriteString("\"device.settings.modifiedDate\": " + strconv.FormatUint(value.Device.Settings.ModifiedDate, 10) + ",")
+		builder.WriteString("\"device.settingsSynched.version\": " + strconv.FormatUint(value.Device.SettingsSynched.Version, 10) + ",")
+		builder.WriteString("\"device.settingsSynched.syncDate\": " + strconv.FormatUint(value.Device.SettingsSynched.SyncDate, 10) + ",")
+		builder.WriteString("\"device.properties.ownerId\": \"" + value.Device.Properties.OwnerID + IE)
+		builder.WriteString("\"device.properties.version\": " + strconv.FormatUint(value.Device.Properties.Version, 10) + ",")
+		builder.WriteString("\"device.properties.modifiedDate\": " + strconv.FormatUint(value.Device.Properties.ModifiedDate, 10) + ",")
+		builder.WriteString("\"imei\": \"" + value.Imei + IE)
+		builder.WriteString("\"connected\": " + strconv.FormatBool(value.Connected) + ",")
+		builder.WriteString("\"connectionDate\": " + strconv.FormatUint(value.ConnectionDate, 10) + ",")
+		builder.WriteString("\"checkinDate\": " + strconv.FormatUint(value.CheckinDate, 10) + ",")
+		builder.WriteString("\"telemetryDate\": " + strconv.FormatUint(value.TelemetryDate, 10) + ",")
+		builder.WriteString("\"propertiesDate\": " + strconv.FormatUint(value.PropertiesDate, 10) + ",")
+		builder.WriteString("\"cloudPropVer\": " + strconv.FormatUint(value.CloudPropVer, 10) + ",")
+		builder.WriteString("\"devicePropVer\": " + strconv.FormatUint(value.DevicePropVer, 10) + ",")
+		builder.WriteString("\"synchedSettingsDate\": " + strconv.FormatUint(value.SynchedSettingsDate, 10) + ",")
+		builder.WriteString("\"synchedSettingsVer\": " + strconv.FormatUint(value.SynchedSettingsVer, 10) + ",")
+		builder.WriteString("\"currSettingsVer\": " + strconv.FormatUint(value.CurrSettingsVer, 10) + ",")
+		builder.WriteString("\"currSettingsDate\": " + strconv.FormatUint(value.CurrSettingsDate, 10) + ",")
+		builder.WriteString("\"caChain\": \"" + value.CAChain + IE)
+		builder.WriteString("\"lastCmdDate\": " + strconv.FormatUint(value.LastCmdDate, 10) + ",")
+		builder.WriteString("\"battPercent\": " + strconv.FormatFloat(value.BattPercent, 'f', 1, 64))
+		// Finish off the "item" aka device
 		builder.WriteString("}")
 		count++
-		// End the "item"
+		// End the "item" line
 		if count != last {
 			builder.WriteString(",\n")
+		} else {
+			builder.WriteString("\n")
 		}
 	}
-	builder.WriteString("\n]")
+	builder.WriteString("]")
 	fmt.Fprintf(os.Stderr, "\r                                                       \r")
 	return builder.String()
 }
@@ -439,30 +533,26 @@ to quickly create a Cobra application.`,
 		// TODO: When done, finish and let the user know.
 		// TODO: An idea - can I catch if they use - as a parameter, perhaps the filename and
 		//   collect from STDIN and dump to STDOUT vs specifying filenames?
+
+		// Up the buffer size to 100MB
+		const maxCapacity = 100 * 1024 * 1024 // 100 MB
+
 		if filename, err := cmd.Flags().GetString("filename"); err == nil {
 			if filename == "-" {
-				fmt.Fprintf(os.Stderr, "flattendevicejson using STDIN and STDOUT")
+				fmt.Fprintf(os.Stderr, "flattendevicejson using STDIN and STDOUT\n")
 				scanner := bufio.NewScanner(os.Stdin)
-				// TODO: Remove this when it is production code or this gets inserted into the output stream
-				//fmt.Println("Enter text. Use CTRL+Z and enter for windows or CTRL+D on Linux/Unix/MacOS or CTRL+C to stop:")
-
+				// Up the buffer size to 100MB
+				buf := make([]byte, maxCapacity)
+				scanner.Buffer(buf, maxCapacity)
+				fmt.Fprintf(os.Stderr, "maxCapacity is: %d\n", maxCapacity)
 				for scanner.Scan() {
 					line := scanner.Bytes()
-					// TODO: Remove this for production code as we only want to output the processed JSON
-					//fmt.Printf("Received: %s\n", line)
-					// TODO: This is where my processing code is called / placed for handling STDIN to STDOUT
 					items, _ := UnmarshalItems(line)
-					//bytes, _ := items.Marshal()
-					//fmt.Print(string(bytes))
-					//fmt.Printf("%+v", items)
-					for key, value := range items {
-						fmt.Fprintf(os.Stderr, "%s has imei %s\n", key, value.Imei)
-						//fmt.Printf("IMEI is %s", items)
-					}
+					fmt.Print(printDevices(items))
 				}
-
+				fmt.Fprintln(os.Stderr, "Finished processing                                             ")
 				if err := scanner.Err(); err != nil {
-					fmt.Fprintln(os.Stderr, "reading standard input:", err)
+					fmt.Fprintf(os.Stderr, "\n\nmaxCapacity: %d, Reading file: %+v", maxCapacity, err)
 				}
 			} else {
 				fmt.Fprintf(os.Stderr, "flattendevicejson called with filename: %s\n", filename)
@@ -470,19 +560,21 @@ to quickly create a Cobra application.`,
 				file, err := os.Open(filename)
 				if errors.Is(err, os.ErrNotExist) {
 					// Handle the case where the file does not exist
-					fmt.Fprintln(os.Stderr, "File not found, handling the case")
+					fmt.Fprintf(os.Stderr, "File not found %s\n", filename)
+					os.Exit(-1)
 				} else if err != nil {
 					// Handle other potential errors
-					fmt.Fprintf(os.Stderr, "An error occurred: %v\n", err)
+					fmt.Fprintf(os.Stderr, "An error occurred handling filename %s: %v\n", filename, err)
+					os.Exit(-1)
 				} else {
 					// File was opened successfully
-					scanner := bufio.NewScanner(file)
 					defer file.Close() // Remember to close the file
 					fmt.Fprintln(os.Stderr, "File opened successfully")
-					// Up the buffer size to 70MB
-					const maxCapacity = 70 * 1024 * 1024 // 10 MB
+
+					scanner := bufio.NewScanner(file)
 					buf := make([]byte, maxCapacity)
 					scanner.Buffer(buf, maxCapacity)
+					fmt.Fprintf(os.Stderr, "maxCapacity is: %d\n", maxCapacity)
 					for scanner.Scan() {
 						line := scanner.Bytes()
 						items, _ := UnmarshalItems(line)
@@ -493,9 +585,9 @@ to quickly create a Cobra application.`,
 						// 	fmt.Printf("%s has imei %s\n", key, value.Imei)
 						// }
 					}
-					fmt.Fprintln(os.Stderr, "Finished processing")
+					fmt.Fprintln(os.Stderr, "Finished processing                                                 ")
 					if err := scanner.Err(); err != nil {
-						fmt.Fprintln(os.Stderr, "reading file:", err)
+						fmt.Fprintf(os.Stderr, "\n\nmaxCapacity: %d, Reading file: %+v", maxCapacity, err)
 					}
 				}
 

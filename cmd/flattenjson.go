@@ -19,6 +19,8 @@ var flattenjsonCmd = &cobra.Command{
 	Usage: flattenjson -filename <filename>
 	It expects the JSON in the format coming out of the query to the PosiversePortal`,
 	Run: func(cmd *cobra.Command, args []string) {
+		// TODO: I have decided this should be the generic version that flattens *ANY* JSON following the "standard"
+		// TODO: So I have to track depth, starting tokens to know if I am in an object or an array and how many etc etc.
 		if filename, err := cmd.Flags().GetString("filename"); err == nil {
 			fmt.Printf("flattenjson called with filename: %s\n", filename)
 		} else {
@@ -32,7 +34,7 @@ var flattenjsonCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(flattenjsonCmd)
 
-	flattenjsonCmd.PersistentFlags().String("filename", "", "Provide a filename with JSON to flatten.")
+	flattenjsonCmd.Flags().String("filename", "", "Provide a filename with JSON to flatten.")
 
 	// Here you will define your flags and configuration settings.
 
